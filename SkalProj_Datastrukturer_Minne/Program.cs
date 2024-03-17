@@ -59,25 +59,43 @@ namespace SkalProj_Datastrukturer_Minne
 
         /// <summary>
         /// Examines the datastructure List
+        /// Den underliggande arrayen ökar i storlek när arrayen har fyllts och den inte har mer plats.
+        /// Arrayen börjar med en storlek på 4 och ökar sedan exponentiellt i storlek när det behövs.
+        /// Eftersom att det är dyrt att lägga till nya element i listan är det mer effektiv att öka arrayens storlek på detta sätt
+        /// än att öka i samma takt som det läggs till element.
+        /// Kapaciteten minskar inte när man tar bort element. 
+        /// Det är mer fördelaktigt att använda en egendefinerad array när man vet i förhand hur stor array man behöver.
         /// </summary>
-        static void ExamineList()
+        static void ExamineList(List<string> theList = null)
         {
-            /*
-             * Loop this method untill the user inputs something to exit to main menue.
-             * Create a switch statement with cases '+' and '-'
-             * '+': Add the rest of the input to the list (The user could write +Adam and "Adam" would be added to the list)
-             * '-': Remove the rest of the input from the list (The user could write -Adam and "Adam" would be removed from the list)
-             * In both cases, look at the count and capacity of the list
-             * As a default case, tell them to use only + or -
-             * Below you can see some inspirational code to begin working.
-            */
+            if (theList == null) {
+                theList = new List<string>();
+            }
 
-            //List<string> theList = new List<string>();
-            //string input = Console.ReadLine();
-            //char nav = input[0];
-            //string value = input.substring(1);
+            Console.WriteLine("Type either (+) or (-) followed by any value to add or remove from the list. Type (Q) to exit to main menu.");
+            string input = Console.ReadLine();
+            char nav = input[0];
+            string value = input.Substring(1);
 
-            //switch(nav){...}
+            switch (nav)
+            {
+                case '+':
+                    theList.Add(value);
+                    Console.WriteLine($"'{value}' added to the list.\nList count: {theList.Count}\nList capacity: {theList.Capacity}");
+                    break;
+                case '-':
+                    theList.Remove(value);
+                    Console.WriteLine($"'{value}' removed from the list.\nList count: {theList.Count}\nList capacity: {theList.Capacity}");
+                    break;
+                case 'Q':
+                case 'q':
+                    return;
+                default:
+                    Console.WriteLine("Invalid input. Type either (+) or (-) followed by any value to add or remove from the list. Type (Q) to exit to main menu.");
+                    break;
+            }
+
+            ExamineList(theList);
         }
 
         /// <summary>
