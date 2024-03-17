@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace SkalProj_Datastrukturer_Minne
 {
@@ -13,11 +14,12 @@ namespace SkalProj_Datastrukturer_Minne
 
             while (true)
             {
-                Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 ,4, 0) of your choice"
+                Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3, 4, 5, 0) of your choice"
                     + "\n1. Examine a List"
                     + "\n2. Examine a Queue"
                     + "\n3. Examine a Stack"
                     + "\n4. CheckParenthesis"
+                    + "\n5. ReverseText"
                     + "\n0. Exit the application");
                 char input = ' '; //Creates the character input to be used with the switch-case below.
                 try
@@ -42,6 +44,9 @@ namespace SkalProj_Datastrukturer_Minne
                         break;
                     case '4':
                         CheckParanthesis();
+                        break;
+                    case '5':
+                        ReverseText();
                         break;
                     /*
                      * Extend the menu to include the recursive 
@@ -68,7 +73,8 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         static void ExamineList(List<string> theList = null)
         {
-            if (theList == null) {
+            if (theList == null)
+            {
                 theList = new List<string>();
             }
 
@@ -100,26 +106,137 @@ namespace SkalProj_Datastrukturer_Minne
 
         /// <summary>
         /// Examines the datastructure Queue
+        /// Vi kan lägga till element och ta bort från kön med denna metod.
         /// </summary>
-        static void ExamineQueue()
+        static void ExamineQueue(Queue<string> theQueue = null)
         {
-            /*
-             * Loop this method untill the user inputs something to exit to main menue.
-             * Create a switch with cases to enqueue items or dequeue items
-             * Make sure to look at the queue after Enqueueing and Dequeueing to see how it behaves
-            */
+            if (theQueue == null)
+            {
+                theQueue = new Queue<string>();
+            }
+
+            Console.WriteLine("Type (+) followed by any value to add the value to the queue. Type (-) to dequeue. Type (Q) to exit to main menu.");
+            string input = Console.ReadLine();
+            char nav = input[0];
+            string value = input.Substring(1);
+
+            switch (nav)
+            {
+                case '+':
+                    theQueue.Enqueue(value);
+                    Console.WriteLine($"'{value}' added to the queue.\nThe queue:");
+                    PrintQueue(theQueue);
+                    break;
+                case '-':
+                    if (theQueue.TryPeek(out _))
+                    {
+                        string result = theQueue.Dequeue();
+                        Console.WriteLine($"'{result}' removed from the queue.\nThe queue:");
+                        PrintQueue(theQueue);
+                    }
+                    else
+                    {
+                        Console.WriteLine("The queue is empty");
+                    }
+                    break;
+                case 'Q':
+                case 'q':
+                    return;
+                default:
+                    Console.WriteLine("Invalid input. Type (+) followed by any value to add the value to the queue. Type (-) to dequeue. Type (Q) to exit to main menu.");
+                    break;
+            }
+
+            ExamineQueue(theQueue);
+        }
+        // Hjälp metod för att skriva ut kön
+        static void PrintQueue(Queue<string> theQueue)
+        {
+            foreach (string item in theQueue)
+            {
+                Console.WriteLine(item);
+            }
         }
 
         /// <summary>
         /// Examines the datastructure Stack
+        /// Vi kan lägga till element (push) till stacken och ta bort (pop) element från toppen av stacken. 
         /// </summary>
-        static void ExamineStack()
+        static void ExamineStack(Stack<string> theStack = null)
         {
-            /*
-             * Loop this method until the user inputs something to exit to main menue.
-             * Create a switch with cases to push or pop items
-             * Make sure to look at the stack after pushing and and poping to see how it behaves
-            */
+            if (theStack == null)
+            {
+                theStack = new Stack<string>();
+            }
+
+            Console.WriteLine("Type (+) followed by any value to add the value to the stack. Type (-) to pop. Type (Q) to exit to main menu.");
+            string input = Console.ReadLine();
+            char nav = input[0];
+            string value = input.Substring(1);
+
+            switch (nav)
+            {
+                case '+':
+                    theStack.Push(value);
+                    Console.WriteLine($"'{value}' added to the stack.\nThe stack:");
+                    PrintStack(theStack);
+                    break;
+                case '-':
+                    if (theStack.TryPeek(out _))
+                    {
+                        string result = theStack.Pop();
+                        Console.WriteLine($"'{result}' removed from the stack.\nThe stack:");
+                        PrintStack(theStack);
+                    }
+                    else
+                    {
+                        Console.WriteLine("The stack is empty");
+                    }
+                    break;
+                case 'Q':
+                case 'q':
+                    return;
+                default:
+                    Console.WriteLine("Invalid input. Type (+) followed by any value to add the value to the stack. Type (-) to pop. Type (Q) to exit to main menu.");
+                    break;
+            }
+
+            ExamineStack(theStack);
+        }
+
+        // Hjälp metod för att skriva ut stacken
+        static void PrintStack(Stack<string> theStack)
+        {
+            foreach (string item in theStack)
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        // Vänder ordning på användar inmatad text med hjälp av en stack
+        static void ReverseText()
+        {
+            Console.WriteLine("Type a text to be reversed:");
+            string input = Console.ReadLine();
+            Stack<char> theStack = new Stack<char>();
+            // Lägg till varje bokstav till stacken
+            foreach (char letter in input)
+            {
+                theStack.Push(letter);
+            }
+
+            string reversedText = "";
+            // Metod 1 
+            /*  foreach(char letter in theStack) {
+                 reversedText += letter;
+             } */
+            // Metod 2
+            while (theStack.TryPeek(out _))
+            {
+                char letter = theStack.Pop();
+                reversedText += letter;
+            }
+            Console.WriteLine($"Result: {reversedText}");
         }
 
         static void CheckParanthesis()
