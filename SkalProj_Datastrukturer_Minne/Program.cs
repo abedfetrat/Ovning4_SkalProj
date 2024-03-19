@@ -46,7 +46,7 @@ namespace SkalProj_Datastrukturer_Minne
                         ExamineStack();
                         break;
                     case '4':
-                        Checkparantheses();
+                        CheckParantheses2();
                         break;
                     case '5':
                         ReverseText();
@@ -197,11 +197,14 @@ namespace SkalProj_Datastrukturer_Minne
             ExamineStack(theStack);
         }
 
-        // Vänder ordning på användar inmatad text med hjälp av en stack
+        /// <summary>
+        /// Vänder ordning på användar inmatad text med hjälp av en Stack
+        /// </summary>
         static void ReverseText()
         {
             Console.WriteLine("Type a text to be reversed:");
             string input = Console.ReadLine();
+
             Stack<char> theStack = new Stack<char>();
             // Lägg till varje bokstav till stacken
             foreach (char letter in input)
@@ -210,29 +213,23 @@ namespace SkalProj_Datastrukturer_Minne
             }
 
             string reversedText = "";
-            // Metod 1 
-            /*  foreach(char letter in theStack) {
-                 reversedText += letter;
-             } */
-            // Metod 2
-            while (theStack.TryPeek(out _))
+            while (theStack.TryPop(out char letter))
             {
-                char letter = theStack.Pop();
                 reversedText += letter;
             }
-            Console.WriteLine($"Result: {reversedText}");
+            Console.WriteLine($"Result: {reversedText}\n");
         }
 
         /// <summary>
-        /// Kollar om användar inmatad text innehåller balanserade paranteser
+        /// Validerar om en sträng innehåller paranteser som öppnats och stängts korrekt.
         /// </summary>
-        static void Checkparantheses()
+        public static void CheckParantheses2()
         {
             Console.WriteLine("Type a text with parantheses to validate:");
             string input = Console.ReadLine();
 
+            // Först extraherar vi alla paranteser från input till en lista
             List<char> parantheses = [];
-            // Iterera över input och extrahera alla paranteser till listan ovan
             foreach (char letter in input)
             {
                 if (Helpers.IsParanthese(letter))
@@ -241,40 +238,32 @@ namespace SkalProj_Datastrukturer_Minne
                 }
             }
 
-            bool valid = true;
-            // Denna stack lagrar alla closing paranteser som stöts på i loopen nedan
-            Stack<char> closing = [];
-            /* 
-            Iterera över alla paranteser i listan och gör checkar på var och en.
-            Om vi stötter på en opening parantes t.ex. ( , lägger vi till dens respektive closing parantes till stacken
-            Om vi inte stötter på någon opening parantes kollar vi om stacken är tom eller parantesen överst i stacken
-            ej är av samma parantes sort. I så fall avbryter vi loopen och retunerar false.
-            Om stacken är tom betyder det att det finns en parantes som öppnats men inte stängts.
-            Om parantesen övers i stacken ej är av samma sort betyder det att det finns en closing parantes men som inte öppnats.
-             */
+            // Sedan gör vi självaste validation nedan.
+            bool isValid = true;
+            Stack<char> temp = [];
+            // Vi itererar parantes listan 
             foreach (char p in parantheses)
             {
-                if (p == '(')
+                // Om parantesen p är en börjande parantes lägger vi till den i stacken temp.
+                if (Helpers.IsOpeningParanthesis(p))
                 {
-                    closing.Push(')');
+                    temp.Push(p);
                 }
-                else if (p == '{')
+                // Annars är parantesen p en avslutande parantes.
+                // Vi kollar om stacken temp är tom. Om den är tom betyder det att det inte finns en börjande parantes för 
+                // den avslutande parantesen p.
+                // Då blir resultat av validationen ej valid. 
+                // Annars kollar vi om den avslutande parantesen p är par till den börjande parantesen som finns på toppen av stacken.
+                // Om det är den fortsätter vi med iterationen för att kolla nästa parantes i listan.
+                // Om den inte är det blir resultatet av validationen ej valid.
+                else if (temp.Count == 0 || !Helpers.IsParanthesisPair(temp.Pop(), p))
                 {
-                    closing.Push('}');
-                }
-                else if (p == '[')
-                {
-                    closing.Push(']');
-                }
-                else if (closing.Count == 0 || closing.Pop() != p)
-                {
-                    valid = false;
+                    isValid = false;
                     break;
                 }
             }
 
-            Console.WriteLine($"Valid: {valid}");
+            Console.WriteLine($"Valid: {isValid}\n");
         }
     }
 }
-

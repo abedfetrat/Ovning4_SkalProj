@@ -1,8 +1,9 @@
-﻿namespace SkalProj_Datastrukturer_Minne;
+﻿
+
+namespace SkalProj_Datastrukturer_Minne;
 
 public class Helpers
 {
-    // Hjälp metod för att skriva ut kön
     public static void PrintQueue(Queue<string> theQueue)
     {
         foreach (string item in theQueue)
@@ -11,7 +12,6 @@ public class Helpers
         }
     }
 
-    // Helper metod för att skriva ut stacken av string
     public static void PrintStack(Stack<string> theStack)
     {
         foreach (string item in theStack)
@@ -19,10 +19,20 @@ public class Helpers
             Console.WriteLine(item);
         }
     }
-    // Helper metod för att kolla om en input är en parantes av sorten nedan
+
     public static bool IsParanthese(char letter)
     {
         List<char> possibleMatches = ['(', ')', '{', '}', '[', ']'];
         return possibleMatches.Contains(letter);
+    }
+
+    internal static bool IsOpeningParanthesis(char p)
+    {
+        return p == '(' || p == '{' || p == '[';
+    }
+
+    internal static bool IsParanthesisPair(char p1, char p2)
+    {
+        return (p1 == '(' && p2 == ')') || (p1 == '{' && p2 == '}') || (p1 == '[' && p2 == ']');
     }
 }
