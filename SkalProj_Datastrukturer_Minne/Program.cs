@@ -128,14 +128,13 @@ namespace SkalProj_Datastrukturer_Minne
                 case '+':
                     theQueue.Enqueue(value);
                     Console.WriteLine($"'{value}' added to the queue.\nThe queue:");
-                    PrintQueue(theQueue);
+                    Helpers.PrintQueue(theQueue);
                     break;
                 case '-':
-                    if (theQueue.TryPeek(out _))
+                    if (theQueue.TryDequeue(out string result))
                     {
-                        string result = theQueue.Dequeue();
                         Console.WriteLine($"'{result}' removed from the queue.\nThe queue:");
-                        PrintQueue(theQueue);
+                        Helpers.PrintQueue(theQueue);
                     }
                     else
                     {
@@ -151,14 +150,6 @@ namespace SkalProj_Datastrukturer_Minne
             }
 
             ExamineQueue(theQueue);
-        }
-        // Hjälp metod för att skriva ut kön
-        static void PrintQueue(Queue<string> theQueue)
-        {
-            foreach (string item in theQueue)
-            {
-                Console.WriteLine(item);
-            }
         }
 
         /// <summary>
@@ -182,14 +173,13 @@ namespace SkalProj_Datastrukturer_Minne
                 case '+':
                     theStack.Push(value);
                     Console.WriteLine($"'{value}' added to the stack.\nThe stack:");
-                    PrintStack(theStack);
+                    Helpers.PrintStack(theStack);
                     break;
                 case '-':
-                    if (theStack.TryPeek(out _))
+                    if (theStack.TryPop(out string result))
                     {
-                        string result = theStack.Pop();
                         Console.WriteLine($"'{result}' removed from the stack.\nThe stack:");
-                        PrintStack(theStack);
+                        Helpers.PrintStack(theStack);
                     }
                     else
                     {
@@ -205,15 +195,6 @@ namespace SkalProj_Datastrukturer_Minne
             }
 
             ExamineStack(theStack);
-        }
-
-        // Hjälp metod för att skriva ut stacken
-        static void PrintStack(Stack<string> theStack)
-        {
-            foreach (string item in theStack)
-            {
-                Console.WriteLine(item);
-            }
         }
 
         // Vänder ordning på användar inmatad text med hjälp av en stack
@@ -242,6 +223,9 @@ namespace SkalProj_Datastrukturer_Minne
             Console.WriteLine($"Result: {reversedText}");
         }
 
+        /// <summary>
+        /// Kollar om användar inmatad text innehåller balanserade paranteser
+        /// </summary>
         static void Checkparantheses()
         {
             Console.WriteLine("Type a text with parantheses to validate:");
