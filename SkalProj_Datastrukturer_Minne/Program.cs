@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Runtime.InteropServices;
 
 namespace SkalProj_Datastrukturer_Minne
 {
@@ -43,7 +46,7 @@ namespace SkalProj_Datastrukturer_Minne
                         ExamineStack();
                         break;
                     case '4':
-                        CheckParanthesis();
+                        Checkparantheses();
                         break;
                     case '5':
                         ReverseText();
@@ -239,16 +242,55 @@ namespace SkalProj_Datastrukturer_Minne
             Console.WriteLine($"Result: {reversedText}");
         }
 
-        static void CheckParanthesis()
+        static void Checkparantheses()
         {
-            /*
-             * Use this method to check if the paranthesis in a string is Correct or incorrect.
-             * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
-             * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
+            Console.WriteLine("Type a text with parantheses to validate:");
+            string input = Console.ReadLine();
+
+            List<char> parantheses = [];
+            // Iterera över input och extrahera alla paranteser till listan ovan
+            foreach (char letter in input)
+            {
+                if (Helpers.IsParanthese(letter))
+                {
+                    parantheses.Add(letter);
+                }
+            }
+
+            bool valid = true;
+            // Denna stack lagrar alla closing paranteser som stöts på i loopen nedan
+            Stack<char> closing = [];
+            /* 
+            Iterera över alla paranteser i listan och gör checkar på var och en.
+            Om vi stötter på en opening parantes t.ex. ( , lägger vi till dens respektive closing parantes till stacken
+            Om vi inte stötter på någon opening parantes kollar vi om stacken är tom eller parantesen överst i stacken
+            ej är av samma parantes sort. I så fall avbryter vi loopen och retunerar false.
+            Om stacken är tom betyder det att det finns en parantes som öppnats men inte stängts.
+            Om parantesen övers i stacken ej är av samma sort betyder det att det finns en closing parantes men som inte öppnats.
              */
+            foreach (char p in parantheses)
+            {
+                if (p == '(')
+                {
+                    closing.Push(')');
+                }
+                else if (p == '{')
+                {
+                    closing.Push('}');
+                }
+                else if (p == '[')
+                {
+                    closing.Push(']');
+                }
+                else if (closing.Count == 0 || closing.Pop() != p)
+                {
+                    valid = false;
+                    break;
+                }
+            }
 
+            Console.WriteLine($"Valid: {valid}");
         }
-
     }
 }
 
